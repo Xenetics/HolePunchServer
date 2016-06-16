@@ -120,6 +120,8 @@ namespace HolePunch
                         byte[] response2 = Encoding.UTF8.GetBytes("Client found");
                         m_UdpClient.SendAsync(response2, response2.Length, pair.host);
 
+                        Console.WriteLine("Host found: " + pair.host.Address + " for: " + partner);
+
                         //TODO send pair for punchthrough
 
                         return;
