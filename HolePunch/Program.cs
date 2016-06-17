@@ -134,5 +134,10 @@ namespace HolePunch
         {
             //TODO hole punch sends
         }
+
+        static private void HandleClientPingRequats()
+        {
+
+        }
     }
 }
