@@ -14,5 +14,7 @@ namespace HolePunch
         public IPEndPoint host;
         public IPEndPoint client;
         public bool sentToHost;
+        public bool sentToClient;
+        public bool pingFromClientRecieved;
     }
 }
