@@ -13,5 +13,6 @@ namespace HolePunch
     {
         public IPEndPoint host;
         public IPEndPoint client;
+        public bool sentToHost;
     }
 }

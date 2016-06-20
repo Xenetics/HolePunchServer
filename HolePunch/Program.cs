@@ -68,14 +68,9 @@ namespace HolePunch
                     // decodes message
                     string message = Encoding.UTF8.GetString(data);
                     // prints message
-                    Console.WriteLine(message);
-
-                    // encodes a response into bytes
-                    byte[] response = Encoding.UTF8.GetBytes("Server Recieved message");
-                    // Sends the response to the enpoint just recieved from
-                    m_UdpClient.SendAsync(response, response.Length, newEnd);
-                    
-                    HandlePairing(newEnd, message);
+                    Console.WriteLine("From: " + newEnd.Address + " - Message: " + message);
+                    // Handles the message depending on what was sent
+                    HandleMessage(newEnd, message);
                 }
                 catch (Exception e)
                 {
@@ -106,6 +101,7 @@ namespace HolePunch
             }
             else // If there is a partner IP then match it with a current hosting
             {
+                int i = 0;
                 foreach (Pairing pair in m_Pairings)
                 {
                     if (pair.host.Address == IPAddress.Parse(partner))
@@ -122,22 +118,60 @@ namespace HolePunch
 
                         Console.WriteLine("Host found: " + pair.host.Address + " for: " + partner);
 
-                        //TODO send pair for punchthrough
+                        InitHost(i);
 
+                        i++;
                         return;
                     }
                 }
             }
         }
 
-        static private void PunchHole()
+        static private void InitHost(int i)
         {
-            //TODO hole punch sends
+            m_Pairings[i].sentToHost = true;
+            byte[] message = Encoding.UTF8.GetBytes("Ping Client #" + m_Pairings[i].client.Address);
+            m_UdpClient.SendAsync(message, message.Length, m_Pairings[i].client);
         }
 
-        static private void HandleClientPingRequats()
+        static private void InitClient(int i)
         {
 
+        }
+
+        static private void HandleMessage(IPEndPoint endpoint, string message)
+        {
+            if(message.Contains("Hosting")) // a Player Making a host request
+            {
+                // encodes a response into bytes
+                byte[] response = Encoding.UTF8.GetBytes("Server Recieved Host Request");
+                // Sends the response to the enpoint just recieved from
+                m_UdpClient.SendAsync(response, response.Length, endpoint);
+
+                HandlePairing(endpoint, "");
+            }
+            else if(message.Contains("Joining")) // player making a join request
+            {
+                // Pull Ip out of message for the handle pairing function
+                int start = message.IndexOf('#') + 1;
+                int length = (message.Length - start);
+                string desiredHost = message.Substring(message.IndexOf('#') + 1, length);
+
+                // encodes a response into bytes
+                byte[] response = Encoding.UTF8.GetBytes("Server Recieved Join Request");
+                // Sends the response to the enpoint just recieved from
+                m_UdpClient.SendAsync(response, response.Length, endpoint);
+
+                HandlePairing(endpoint, desiredHost);
+            }
+            else if(message.Contains("Client Pinged")) // host has pinged client
+            {
+
+            }
+            else if (message.Contains("Host Pinged")) // client has pinged host
+            {
+
+            }
         }
     }
 }
