@@ -11,7 +11,7 @@ namespace HolePunch
 {
     class Program
     {
-        static private float m_Version = 0.2f;
+        static private float m_Version = 0.21f;
         /// <summary> Our games port </summary>
         static private int m_Port = 34197;
         /// <summary> The enpoint we listen to </summary>
@@ -231,9 +231,16 @@ namespace HolePunch
                 int i = 0;
                 foreach (Pairing pair in m_Pairings)
                 {
-                    if (pair.hostPublic.Address.ToString() == endpoint.Address.ToString())
+                    if (pair.hostPublic.Address.ToString() == endpoint.Address.ToString() && pair.clientPublic.Address.ToString() == endpoint.Address.ToString())
                     {
-                        Console.WriteLine(pair.hostPublic.Address + " - Recieved ping from - " + pair.clientPublic.Address);
+                        if (pair.hostPublic.Address.ToString() == endpoint.Address.ToString())
+                        {
+                            Console.WriteLine(pair.hostPublic.Address + " - Recieved ping from - " + pair.clientPublic.Address);
+                        }
+                        else if (pair.clientPublic.Address.ToString() == endpoint.Address.ToString())
+                        {
+                            Console.WriteLine(pair.clientPublic.Address + " - Recieved ping from - " + pair.hostPublic.Address);
+                        }
                         Console.WriteLine(">");
                         m_Pairings[i].pingFromClientRecieved = true;
 
