@@ -11,8 +11,10 @@ namespace HolePunch
 {
     public class Pairing
     {
-        public IPEndPoint host;
-        public IPEndPoint client;
+        public IPEndPoint hostPublic;
+        public IPEndPoint hostPrivate;
+        public IPEndPoint clientPublic;
+        public IPEndPoint clientPrivate;
         public bool sentToHost;
         public bool sentToClient;
         public bool pingFromClientRecieved;
