@@ -159,7 +159,8 @@ namespace HolePunch
                         Console.WriteLine("Matching Host" + message);
                         Console.WriteLine(">");
 
-                        InitHost(i);
+                        //InitHost(i);
+                        InitClient(i);
 
                         i++;
                         return;
@@ -224,7 +225,19 @@ namespace HolePunch
             }
             else if (message.Contains("Host Pinged")) // client has pinged host
             {
+                int i = 0;
+                foreach (Pairing pair in m_Pairings)
+                {
+                    if (pair.clientPublic.Address.ToString() == endpoint.Address.ToString())
+                    {
+                        Console.WriteLine("Client: " + pair.clientPublic.Address + " Pinged: " + pair.hostPublic.Address);
+                        Console.WriteLine(">");
+                        InitHost(i);
 
+                        i++;
+                        return;
+                    }
+                }
             }
             else if (message.Contains("Ping Recieved from Client")) // host recieved ping from client
             {
