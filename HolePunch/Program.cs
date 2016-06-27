@@ -216,7 +216,7 @@ namespace HolePunch
                     {
                         Console.WriteLine("Host: " + pair.hostPublic.Address + " Pinged: " + pair.clientPublic.Address);
                         Console.WriteLine(">");
-                        InitClient(i);
+                        //InitClient(i);
 
                         i++;
                         return;
